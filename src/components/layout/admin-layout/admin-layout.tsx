@@ -11,7 +11,7 @@ const items2: MenuProps["items"] = [
     key: `Users`,
     label: `Users`,
 
-    children: [{ key: 0, label: <Link to={"dashboard"}>Users</Link> }],
+    children: [{ key: 0, label: <Link to={"users"}>Users</Link> }],
   },
 ];
 

@@ -25,7 +25,7 @@ export default function SignIn() {
     mutationFn: login,
     onSuccess: () => {
       queryClient.invalidateQueries();
-      navigate("admin/dashboard");
+      navigate("/admin");
     },
   });
 

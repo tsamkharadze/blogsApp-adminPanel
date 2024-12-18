@@ -7,6 +7,7 @@ import AdminLayout from "./components/layout/admin-layout/admin-layout";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/auth";
 import { supabase } from "./supabase";
+import UsersView from "./components/pages/users/view/users-view";
 
 function App() {
   const [, setUser] = useAtom(userAtom);
@@ -42,7 +43,8 @@ function App() {
           }
         />
         <Route path="admin" element={<AdminLayout />}>
-          <Route path="dashboard" element={<DashboardView />} />
+          <Route path="blogs" element={<DashboardView />} />
+          <Route path="users" element={<UsersView />} />
         </Route>
       </Routes>
     </BrowserRouter>
