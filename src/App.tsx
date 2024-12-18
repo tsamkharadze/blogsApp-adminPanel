@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { Suspense, useEffect, useState } from "react";
+import SignInView from "./components/pages/sign-in/view/sign-in-view";
+import DashboardView from "./components/pages/dashboard/view/dashboard-view";
+import AdminLayout from "./components/layout/admin-layout/admin-layout";
+import { useAtom } from "jotai";
+import { userAtom } from "./store/auth";
+import { supabase } from "./supabase";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [, setUser] = useAtom(userAtom);
+  const [isLoading, setIsloading] = useState(true);
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session);
+      setIsloading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setUser]);
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <SignInView />
+            </Suspense>
+          }
+        />
+        <Route path="admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<DashboardView />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
