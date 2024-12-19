@@ -14,6 +14,7 @@ import IsAuthorizedGuard from "./components/route-guards/authorized/is-authorize
 import IsUnauthorizedGuard from "./components/route-guards/unauthorized/is-unauthorized-guard";
 import AddBlogView from "./components/pages/blogs/views/add-blog-view";
 import DashboardLayout from "./components/layout/admin-layout/admin-layout";
+import AuthLayout from "./components/layout/auth/authlayout";
 
 function App() {
   const [, setUser] = useAtom(userAtom);
@@ -40,16 +41,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<div>Loading...</div>}>
-              <IsAuthorizedGuard>
-                <SignInView />
-              </IsAuthorizedGuard>
-            </Suspense>
-          }
-        />
+        <Route element={<AuthLayout />}>
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <IsAuthorizedGuard>
+                  <SignInView />
+                </IsAuthorizedGuard>
+              </Suspense>
+            }
+          />
+        </Route>
         <Route
           path="admin"
           element={
