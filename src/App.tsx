@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Suspense, useEffect, useState } from "react";
 import SignInView from "./components/pages/sign-in/view/sign-in-view";
-import DashboardView from "./components/pages/dashboard/view/dashboard-view";
 import AdminLayout from "./components/layout/admin-layout/admin-layout";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/auth";
@@ -10,6 +9,10 @@ import { supabase } from "./supabase";
 import UsersView from "./components/pages/users/views/users-view";
 import EditView from "./components/pages/users/views/edit-view";
 import CreateUserView from "./components/pages/users/views/create-user-view";
+import BlogsListView from "./components/pages/blogs/views/blogs-list-view";
+import BlogEditView from "./components/pages/blogs/views/blog-edit-view";
+import IsAuthorizedGuard from "./components/route-guards/authorized/is-authorized-guard";
+import IsUnauthorizedGuard from "./components/route-guards/unauthorized/is-unauthorized-guard";
 
 function App() {
   const [, setUser] = useAtom(userAtom);
@@ -40,15 +43,25 @@ function App() {
           path="/"
           element={
             <Suspense fallback={<div>Loading...</div>}>
-              <SignInView />
+              <IsAuthorizedGuard>
+                <SignInView />
+              </IsAuthorizedGuard>
             </Suspense>
           }
         />
-        <Route path="admin" element={<AdminLayout />}>
-          <Route path="blogs" element={<DashboardView />} />
+        <Route
+          path="admin"
+          element={
+            <IsUnauthorizedGuard>
+              <AdminLayout />
+            </IsUnauthorizedGuard>
+          }
+        >
           <Route path="users" element={<UsersView />} />
           <Route path="users/edit/:id" element={<EditView />} />
           <Route path="users/create" element={<CreateUserView />} />
+          <Route path="blogs" element={<BlogsListView />} />
+          <Route path="blogs/edit/:id" element={<BlogEditView />} />
         </Route>
       </Routes>
     </BrowserRouter>

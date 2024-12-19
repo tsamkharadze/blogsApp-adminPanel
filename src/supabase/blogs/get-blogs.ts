@@ -18,7 +18,7 @@ export const getBlogs = async (): Promise<
 };
 
 export const getFilteredBlogs = async (
-  searchQuery: string = "",
+  searchQuery: string = ""
 ): Promise<Database["public"]["Tables"]["blogs"]["Row"][]> => {
   const { data, error } = await supabase
     .from("blogs")
@@ -35,14 +35,14 @@ export const getFilteredBlogs = async (
   return data;
 };
 
-export const getSingleCountry = async (
-  blogId: number | string, // Assuming the `id` can be a number or string
+export const getBlogById = async (
+  blogId: number | string // Assuming the `id` can be a number or string
 ): Promise<Database["public"]["Tables"]["blogs"]["Row"] | null> => {
   const { data, error } = await supabase
-    .from("blogs") // Replace with your actual table name
+    .from("blogs")
     .select("*")
-    .eq("id", blogId) // Filter by the `id` column
-    .single() // Ensures only one row is returned
+    .eq("id", blogId)
+    .single()
     .throwOnError();
 
   if (error) {
