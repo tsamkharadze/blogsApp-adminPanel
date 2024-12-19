@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Suspense, useEffect, useState } from "react";
 import SignInView from "./components/pages/sign-in/view/sign-in-view";
-import AdminLayout from "./components/layout/admin-layout/admin-layout";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/auth";
 import { supabase } from "./supabase";
@@ -14,6 +13,7 @@ import BlogEditView from "./components/pages/blogs/views/blog-edit-view";
 import IsAuthorizedGuard from "./components/route-guards/authorized/is-authorized-guard";
 import IsUnauthorizedGuard from "./components/route-guards/unauthorized/is-unauthorized-guard";
 import AddBlogView from "./components/pages/blogs/views/add-blog-view";
+import DashboardLayout from "./components/layout/admin-layout/admin-layout";
 
 function App() {
   const [, setUser] = useAtom(userAtom);
@@ -54,7 +54,7 @@ function App() {
           path="admin"
           element={
             <IsUnauthorizedGuard>
-              <AdminLayout />
+              <DashboardLayout />
             </IsUnauthorizedGuard>
           }
         >

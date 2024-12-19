@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
-const { Text, Title, Link } = Typography;
+const { Text, Title } = Typography;
 
 interface SignInFormValues {
   email: string;
@@ -95,7 +95,7 @@ export default function SignIn() {
 
           <Title style={styles.title}>Sign in</Title>
           <Text style={styles.text}>
-            Welcome back to AntBlocks UI! Please enter your details below to
+            Welcome to BitBlogs Admin Panel! Please enter your details below to
             sign in.
           </Text>
         </div>
@@ -139,18 +139,11 @@ export default function SignIn() {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
-            <a style={styles.forgotPassword} href="">
-              Forgot password?
-            </a>
           </Form.Item>
           <Form.Item style={{ marginBottom: "0px" }}>
             <Button block type="primary" htmlType="submit">
               Log in
             </Button>
-            <div style={styles.footer}>
-              <Text style={styles.text}>Don't have an account?</Text>{" "}
-              <Link href="">Sign up now</Link>
-            </div>
           </Form.Item>
         </Form>
       </div>

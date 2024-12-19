@@ -19,7 +19,7 @@ const items2: MenuProps["items"] = [
   },
 ];
 
-const AdminLayout: React.FC = () => {
+const DashboardLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -53,4 +53,4 @@ const AdminLayout: React.FC = () => {
   );
 };
 
-export default AdminLayout;
+export default DashboardLayout;
