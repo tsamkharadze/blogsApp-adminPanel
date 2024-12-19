@@ -101,7 +101,7 @@ const BlogsTable: React.FC = () => {
     <Table
       title={() => (
         <Button
-          onClick={() => navigate("create")}
+          onClick={() => navigate("/admin/blogs/create")}
           type="primary"
           icon={<PlusOutlined />}
         >

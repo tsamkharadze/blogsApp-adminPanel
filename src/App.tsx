@@ -13,6 +13,7 @@ import BlogsListView from "./components/pages/blogs/views/blogs-list-view";
 import BlogEditView from "./components/pages/blogs/views/blog-edit-view";
 import IsAuthorizedGuard from "./components/route-guards/authorized/is-authorized-guard";
 import IsUnauthorizedGuard from "./components/route-guards/unauthorized/is-unauthorized-guard";
+import AddBlogView from "./components/pages/blogs/views/add-blog-view";
 
 function App() {
   const [, setUser] = useAtom(userAtom);
@@ -62,6 +63,7 @@ function App() {
           <Route path="users/create" element={<CreateUserView />} />
           <Route path="blogs" element={<BlogsListView />} />
           <Route path="blogs/edit/:id" element={<BlogEditView />} />
+          <Route path="blogs/create" element={<AddBlogView />} />
         </Route>
       </Routes>
     </BrowserRouter>

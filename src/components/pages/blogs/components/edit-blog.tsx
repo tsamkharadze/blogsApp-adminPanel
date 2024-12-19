@@ -7,12 +7,21 @@ import { getBlogById } from "../../../../supabase/blogs/get-blogs";
 import { updateBlog } from "../../../../supabase/blogs/edit-blog";
 import { supabase } from "../../../../supabase";
 
+interface FormValues {
+  title_ka: string;
+  title_en: string;
+  description_ka: string;
+  description_en: string;
+  image_url?: string;
+}
+
 const BlogEdit: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>(""); // Current image URL
+  const [newImagePreview, setNewImagePreview] = useState<string>(""); // Preview for the new image
 
   const {
     data: blog,
@@ -41,18 +50,39 @@ const BlogEdit: React.FC = () => {
         description_en: blog.description_en,
         image_url: blog.image_url || "",
       });
-      setImageUrl(blog.image_url || "");
+      setImageUrl(
+        `${import.meta.env.VITE_SUPABASE_BLOG_IMAGES_STORAGE_URL}/${
+          blog.image_url
+        }`
+      );
     }
   }, [blog, form]);
 
-  const handleFinish = async (values: any) => {
-    console.log(values);
-    // mutation.mutate({ id, ...values });
+  const handleFinish = async (values: FormValues) => {
+    if (imageFile) {
+      const { error } = await supabase.storage
+        .from("blog_images")
+        .upload(imageFile.name, imageFile);
+
+      if (error) {
+        message.error("Failed to upload image. Please try again.");
+        return;
+      }
+
+      values.image_url = imageFile.name;
+    }
+
+    mutation.mutate({ id, ...values });
   };
 
   const handleImageUpload = (file: File) => {
     setImageFile(file);
-    return false; // Prevent auto-upload
+    setNewImagePreview(URL.createObjectURL(file));
+    return false;
+  };
+  const handleDeleteNewImage = () => {
+    setImageFile(null);
+    setNewImagePreview("");
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -116,26 +146,42 @@ const BlogEdit: React.FC = () => {
           <Input.TextArea rows={4} placeholder="Enter English description" />
         </Form.Item>
 
-        <Form.Item label="Image" name="image_url">
-          <Upload
-            multiple={false}
-            accept="image/*"
-            beforeUpload={handleImageUpload}
-          >
-            <Button icon={<UploadOutlined />}>Click to upload</Button>
-          </Upload>
-        </Form.Item>
-
         <Form.Item label="Current Image">
-          {imageUrl && (
+          {imageUrl ? (
             <img
               src={imageUrl}
-              alt="Preview"
+              alt="Current"
               style={{
                 width: "100%",
                 maxHeight: "300px",
                 objectFit: "contain",
                 marginBottom: "12px",
+              }}
+            />
+          ) : (
+            <div>No current image available</div>
+          )}
+        </Form.Item>
+
+        <Form.Item label="New Image">
+          <Upload
+            multiple={false}
+            accept="image/*"
+            beforeUpload={handleImageUpload}
+            maxCount={1}
+            onRemove={handleDeleteNewImage}
+          >
+            <Button icon={<UploadOutlined />}>Click to upload new image</Button>
+          </Upload>
+          {newImagePreview && (
+            <img
+              src={newImagePreview}
+              alt="New Preview"
+              style={{
+                width: "100%",
+                maxHeight: "300px",
+                objectFit: "contain",
+                marginTop: "12px",
               }}
             />
           )}
