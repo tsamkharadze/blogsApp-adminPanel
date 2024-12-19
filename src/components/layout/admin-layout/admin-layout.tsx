@@ -1,8 +1,9 @@
 import React from "react";
 
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet } from "react-router-dom";
+import { logout } from "../../../supabase/auth";
 
 const { Header, Content, Sider } = Layout;
 
@@ -23,10 +24,23 @@ const DashboardLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <Layout>
-      <Header style={{ display: "flex", alignItems: "center" }}></Header>
+      <Header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Button style={{ marginLeft: "auto" }} onClick={handleLogout}>
+          Log Out
+        </Button>
+      </Header>
       <Content style={{ padding: "0 48px" }}>
         <Layout
           style={{
