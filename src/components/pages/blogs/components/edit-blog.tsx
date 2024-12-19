@@ -31,7 +31,8 @@ const BlogEdit: React.FC = () => {
     enabled: !!id,
   });
 
-  const mutation = useMutation(updateBlog, {
+  const { mutate: updateBlogMutation, isLoading: updateLoading } = useMutation({
+    mutationFn: updateBlog,
     onSuccess: () => {
       message.success("Blog updated successfully!");
       navigate("/admin/blogs");
@@ -72,7 +73,7 @@ const BlogEdit: React.FC = () => {
       values.image_url = imageFile.name;
     }
 
-    mutation.mutate({ id, ...values });
+    updateBlogMutation({ id, ...values });
   };
 
   const handleImageUpload = (file: File) => {
@@ -188,7 +189,7 @@ const BlogEdit: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={mutation.isLoading}>
+          <Button type="primary" htmlType="submit" loading={updateLoading}>
             Save Changes
           </Button>
           <Button
