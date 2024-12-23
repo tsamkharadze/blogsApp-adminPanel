@@ -1,10 +1,10 @@
 import { supabase } from "..";
-import { User } from "../../components/types/user"; // Assuming `User` is your single user type
+import { User } from "../../components/types/user";
 
 export const getUsersListInAdmin = async (): Promise<User[]> => {
   const response = await supabase.auth.admin.listUsers();
 
-  if (response.data && Array.isArray(response.data.users)) {
+  if (response.data?.users && Array.isArray(response.data.users)) {
     return response.data.users as User[];
   }
 
