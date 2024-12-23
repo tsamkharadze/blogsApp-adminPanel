@@ -9,3 +9,14 @@ export interface BlogFormInputs {
   image_url?: string | null;
   file?: FileList | null;
 }
+
+export interface Blog {
+  id: string;
+  created_at: string;
+  title_ka: string;
+  title_en: string;
+  description_ka: string;
+  description_en: string;
+  user_id: string;
+  image_url: string;
+}

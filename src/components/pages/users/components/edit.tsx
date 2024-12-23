@@ -6,8 +6,9 @@ import { useGetSingleUserAsAdmin } from "../../../../react-query/query/users/use
 const EditUser = () => {
   const { id } = useParams();
 
-  const { data: userData, isLoading } = useGetSingleUserAsAdmin(id);
-
+  const { data: userData, isLoading } = useGetSingleUserAsAdmin({
+    id: id as string,
+  });
   if (isLoading) return <div>Loading...</div>;
 
   const handleEditUser = (values: { email: string; phone: string }) => {

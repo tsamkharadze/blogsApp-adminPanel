@@ -22,7 +22,11 @@ const BlogEdit: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>(""); // Current image URL
   const [newImagePreview, setNewImagePreview] = useState<string>(""); // Preview for the new image
 
-  const { data: blog, isLoading, isError } = useGetSingleBlog(id);
+  const {
+    data: blog,
+    isLoading,
+    isError,
+  } = useGetSingleBlog({ id: id as string });
 
   const { mutate: updateBlogMutation, isLoading: updateLoading } =
     useEditBlogs();
