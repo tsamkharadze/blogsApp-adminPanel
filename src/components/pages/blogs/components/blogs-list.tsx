@@ -1,22 +1,14 @@
 import React from "react";
 import { Button, Table } from "antd";
-import { useQuery } from "react-query";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { getBlogs } from "../../../../supabase/blogs/get-blogs";
+import { useGetBlogs } from "../../../../react-query/query/blogs/blogs";
 
 const BlogsTable: React.FC = () => {
   const navigate = useNavigate();
-  const {
-    data: blogs,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["blogsList"],
-    queryFn: getBlogs,
-  });
 
+  const { data: blogs, isLoading, isError } = useGetBlogs();
   const formatDate = (date: string) => {
     return dayjs(date).format("YYYY/MM/DD - HH:mm");
   };

@@ -1,8 +1,9 @@
 import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { useMutation, useQueryClient } from "react-query";
-import { login } from "../../../../supabase/auth";
+
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { useSignIn } from "../../../../react-query/mutation/user/auth/authorization";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -20,17 +21,15 @@ export default function SignIn() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutate: handleLogin } = useMutation({
-    mutationKey: ["login"],
-    mutationFn: login,
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-      navigate("/admin");
-    },
-  });
+  const { mutate: handleLogin } = useSignIn();
 
   const onFinish = (values: SignInFormValues) => {
-    handleLogin(values);
+    handleLogin(values, {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        navigate("/admin");
+      },
+    });
   };
 
   const styles = {

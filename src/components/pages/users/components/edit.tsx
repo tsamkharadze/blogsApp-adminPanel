@@ -1,21 +1,12 @@
-import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import {
-  getSingleUserAsAdmin,
-  editUserAsAdmin,
-} from "../../../../supabase/users/get-users";
+import { editUserAsAdmin } from "../../../../supabase/users/get-users";
 import UserForm from "../../../reusable-components/edit-update-form";
+import { useGetSingleUserAsAdmin } from "../../../../react-query/query/users/users-query";
 
 const EditUser = () => {
   const { id } = useParams();
 
-  const { data: userData, isLoading } = useQuery({
-    queryKey: ["singleUserForEdit", id],
-    queryFn: () => {
-      if (!id) throw new Error("User ID is missing");
-      return getSingleUserAsAdmin(id);
-    },
-  });
+  const { data: userData, isLoading } = useGetSingleUserAsAdmin(id);
 
   if (isLoading) return <div>Loading...</div>;
 

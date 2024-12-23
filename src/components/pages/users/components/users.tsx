@@ -5,6 +5,7 @@ import { getUsersListInAdmin } from "../../../../supabase/users/get-users";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { useGetUsersAsAdmin } from "../../../../react-query/query/users/users-query";
 
 // Define the type for a user
 interface User {
@@ -21,14 +22,7 @@ interface User {
 
 const UsersTable: React.FC = () => {
   const navigate = useNavigate();
-  const {
-    data: users,
-    isLoading,
-    isError,
-  } = useQuery<User[]>({
-    queryKey: ["usersInAdmin"],
-    queryFn: getUsersListInAdmin,
-  });
+  const { data: users, isLoading, isError } = useGetUsersAsAdmin();
 
   const handleEdit = (id: string) => {
     console.log("Editing user with ID:", id);

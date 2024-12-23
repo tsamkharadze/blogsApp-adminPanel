@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { getBlogById } from "../../../../supabase/blogs/get-blogs";
-import { updateBlog } from "../../../../supabase/blogs/edit-blog";
 import { supabase } from "../../../../supabase";
+import { useEditBlogs } from "../../../../react-query/mutation/blog/edit/edit-blogs";
+import { useGetSingleBlog } from "../../../../react-query/query/blogs/blogs";
 
 interface FormValues {
   title_ka: string;
@@ -23,24 +22,10 @@ const BlogEdit: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>(""); // Current image URL
   const [newImagePreview, setNewImagePreview] = useState<string>(""); // Preview for the new image
 
-  const {
-    data: blog,
-    isLoading,
-    isError,
-  } = useQuery(["blog", id], () => getBlogById(id as string), {
-    enabled: !!id,
-  });
+  const { data: blog, isLoading, isError } = useGetSingleBlog(id);
 
-  const { mutate: updateBlogMutation, isLoading: updateLoading } = useMutation({
-    mutationFn: updateBlog,
-    onSuccess: () => {
-      message.success("Blog updated successfully!");
-      navigate("/admin/blogs");
-    },
-    onError: () => {
-      message.error("Failed to update blog. Please try again.");
-    },
-  });
+  const { mutate: updateBlogMutation, isLoading: updateLoading } =
+    useEditBlogs();
 
   useEffect(() => {
     if (blog) {
@@ -73,7 +58,18 @@ const BlogEdit: React.FC = () => {
       values.image_url = imageFile.name;
     }
 
-    updateBlogMutation({ id, ...values });
+    updateBlogMutation(
+      { id, ...values },
+      {
+        onSuccess: () => {
+          message.success("Blog updated successfully!");
+          navigate("/admin/blogs");
+        },
+        onError: () => {
+          message.error("Failed to update blog. Please try again.");
+        },
+      }
+    );
   };
 
   const handleImageUpload = (file: File) => {

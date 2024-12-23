@@ -10,6 +10,7 @@ const SignInView = lazy(
 
 export const AUTH_ROUTES = [
   <Route
+    key="landing"
     path="/"
     element={
       <Suspense fallback={<div>Loading...</div>}>
