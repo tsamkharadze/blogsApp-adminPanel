@@ -1,7 +1,5 @@
 import React from "react";
 import { Button, Table } from "antd";
-import { useQuery } from "react-query";
-import { getUsersListInAdmin } from "../../../../supabase/users/get-users";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
